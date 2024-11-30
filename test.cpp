@@ -54,15 +54,22 @@ Mat shiftImg(Mat &image, int offsetX, int offsetY){
 int intersection(Mat &img1,Mat &img2){
         Mat img;
         bitwise_and(img1,img2,img);
-        int sm=sum(img).val[0];
-        for(int i=0;i<2;i++){
-            if(sm>0){
-                img1 = (i==0)?shiftImg(img1,1,-1):shiftImg(img1,-3,0);
+        int sm_prev=sum(img).val[0];
+        int sm_next = sm_prev;
+        int i=0;
+        while(sm_next>0 and i<2){
+                img1 = (i==0)?shiftImg(img1,1,0):shiftImg(img1,-3,0);
                 bitwise_and(img1,img2,img);
-                sm=sum(img).val[0];
-            }
+                sm_next=sum(img).val[0];
+                if(sm_next<sm_prev){
+                    if(sm_next>0){
+                        shiftImg(img1,0,-1);
+                        sm_next = 0;
+                    }
+                }
+                i++;
         }
-        return sm;
+        return sm_next;
 }
 
 
@@ -88,7 +95,7 @@ Vec3i circleDetection(Mat &image) {
 
 int main(int argc, char** argv) {
     
-    const String filename = "2.png";
+    const String filename = "3.png";
     String winName = "Test "+filename;
     Mat channel[3],ch[3];
     
