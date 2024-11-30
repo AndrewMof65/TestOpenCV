@@ -1,17 +1,24 @@
-CC              := clang
-CFLAGS          := -I/usr/local/include/opencv4 -L/usr/local/lib
-OBJECTS         := 
-LIBRARIES       := -lstdc++ -lopencv_core -lopencv_imgcodecs -lopencv_imgproc -lopencv_highgui -lopencv_objdetect 
-
 .PHONY: all clean
 
-all: test
+CC          := clang
+CFLAGS      := -c -I/usr/local/include/opencv4
+LDFLAGS	    := -L/usr/local/lib
+LIBRARIES   := -lstdc++ -lopencv_core -lopencv_imgcodecs -lopencv_imgproc -lopencv_highgui -lopencv_objdetect 
 
-test: 
+SOURCES	    := tools.cpp test.cpp
+OBJECTS	    := $(SOURCES:.cpp=.o)
+EXECUTABLE  := test
 
-	$(CC) $(CFLAGS) -o test test.cpp $(LIBRARIES)
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS) 
+	$(CC) $(LDFLAGS) $(LIBRARIES) $(OBJECTS) -o $@
+
+.cpp.o:
+	$(CC) $(CFLAGS) $< -o $@
         
 clean:
 
-	rm -f *.o test
+	rm -f $(OBJECTS) $(EXECUTABLE)
 
