@@ -3,14 +3,24 @@
 int main(int argc, char** argv) {
     Mat img;
     int sm;
+    char mk_video = 'n';
+    VideoWriter outputVideo;
     String filename = "";
+    string videofile="test.mp4";
     CVTools tools;
     if(argc >1) filename = argv[1];
     if(filename.length()==0){
         cout << "Введите имя файла: " ;
         cin >> filename;
     }
-    String winName = "Test "+filename;
+    cout << "Видеофайл делаем? y/n: " ;
+    cin >> mk_video;
+    if(mk_video == 'y'){
+        getline(stringstream(filename), videofile, '.');
+        videofile += ".mp4";
+        cout<<"Запись видео в файл "<<videofile<<endl;
+    }
+    String winName = "Test_"+filename;
     Mat channel[3],ch[3];
     Mat image = imread(filename);
     if (image.empty()){
@@ -22,7 +32,14 @@ int main(int argc, char** argv) {
     channel[0] = tools.get_filter(ImgFilter::CIRCLE,image);// выделим кружок/шарик
     channel[1] = tools.get_filter(ImgFilter::PATH_LINES,image);//выделим направляющие
     channel[2] = tools.get_filter(ImgFilter::BOXES,image);//выделим ящики
-    
+    if(mk_video == 'y'){
+        int codec = VideoWriter::fourcc('m', 'p', '4', 'v');  
+        outputVideo.open(videofile, codec,10, Size(image.size().width,image.size().height)); 
+        if (!outputVideo.isOpened()){
+            cout  << "Не открывается файл для записи видео: "<< endl;
+            return -1;
+        }
+    }
     for(int i=0;i<image.size().height;i++){
         channel[0] = tools.shiftImg(channel[0],0,1);//Двигаем кружок/шарик вниз
         sm = tools.intersection(channel[0],channel[1]);
@@ -36,15 +53,17 @@ int main(int argc, char** argv) {
         ch[1] = 255-channel[1];
         ch[2] = 255-channel[2];
         merge(ch,3,image);
+        //threshold(image, image, 85, 0, cv::THRESH_BINARY);
+        //cvtColor(image, image, COLOR_BGR2RGB);
         imshow(winName, image);
+        if(i%4==0 && outputVideo.isOpened())outputVideo << image;
         usleep(2000);
         if(waitKey(10) >= 0)break;
     }
-    cout<<"End"<<std::endl;
     Vec3i circle = tools.circleDetection(channel[0]);
-    String coord = "X=";
+    String coord = "Cx=";
     coord+=to_string(circle[0]);
-    coord+=",Y=";
+    coord+=",Cy=";
     coord+=to_string(circle[1]);
     coord+=",D=";
     coord+=to_string(circle[2]);
@@ -56,7 +75,12 @@ int main(int argc, char** argv) {
             4);
     cout<<"Координаты шарика - " << coord <<std::endl;
     imshow(winName, image);
-    while((cv::waitKey() & 0xEFFFFF) != 27);//Press ESC on window focus
+    if(outputVideo.isOpened())
+        for(int i=0;i<50;i++) outputVideo << image;
+        outputVideo.release();
+    cout << "Press ESC on Window "<< winName <<" focus" << endl;
+    while((cv::waitKey() & 0xEFFFFF) != 27);
+    cout<<"End Ok"<<std::endl;
     return 0;
 
 }

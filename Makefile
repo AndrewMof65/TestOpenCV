@@ -1,13 +1,13 @@
 .PHONY: all clean
 
 CC          := clang
-CFLAGS      := -c -I/usr/local/include/opencv4
+CFLAGS      := -c -std=c++14 -I/usr/local/include/opencv4
 LDFLAGS	    := -L/usr/local/lib
-LIBRARIES   := -lstdc++ -lopencv_core -lopencv_imgcodecs -lopencv_imgproc -lopencv_highgui -lopencv_objdetect 
+LIBRARIES   := -lstdc++ -lopencv_core -lopencv_imgcodecs -lopencv_imgproc -lopencv_highgui -lopencv_videoio -lopencv_objdetect 
 
 SOURCES	    := tools.cpp test.cpp
 OBJECTS	    := $(SOURCES:.cpp=.o)
-EXECUTABLE  := test
+EXECUTABLE  := run_me
 
 
 all: $(SOURCES) $(EXECUTABLE)
