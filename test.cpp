@@ -53,8 +53,6 @@ int main(int argc, char** argv) {
         ch[1] = 255-channel[1];
         ch[2] = 255-channel[2];
         merge(ch,3,image);
-        //threshold(image, image, 85, 0, cv::THRESH_BINARY);
-        //cvtColor(image, image, COLOR_BGR2RGB);
         imshow(winName, image);
         if(i%4==0 && outputVideo.isOpened())outputVideo << image;
         usleep(2000);

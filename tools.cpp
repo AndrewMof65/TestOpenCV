@@ -1,7 +1,7 @@
 #include "tools.h"
 
 Mat CVTools::get_filter(ImgFilter type,Mat &image){
-    int hmin;//фильтруем красный кружок
+    int hmin;
     int hmax;
     int vmax;
     int smin = 0;
@@ -10,7 +10,7 @@ Mat CVTools::get_filter(ImgFilter type,Mat &image){
     Mat HSV,threshold;
     cvtColor(image, HSV, COLOR_BGR2HSV);
     switch (type){
-        case ImgFilter::CIRCLE://фильтруем красный кружок
+        case ImgFilter::CIRCLE://фильтруем красный шарик
             hmin = 175;
             hmax = 180;
             vmax = 255;
