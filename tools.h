@@ -24,8 +24,8 @@ enum class ImgFilter{
 class CVTools{
 public:
     CVTools(){}
-    Mat get_filter(ImgFilter type,Mat &image);
-    Mat shiftImg(Mat &image, int offsetX, int offsetY);
-    int intersection(Mat &img1,Mat &img2);
-    Vec3i circleDetection(Mat &image);
+    static Mat get_filter(ImgFilter type,Mat &image);
+    static Mat shiftImg(Mat &image, int offsetX, int offsetY);
+    static int intersection(Mat &img1,Mat &img2);
+    static Vec3i circleDetection(Mat &image);
 };
