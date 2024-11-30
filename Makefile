@@ -1,7 +1,7 @@
-CC              := g++
+CC              := clang
 CFLAGS          := -I/usr/local/include/opencv4 -L/usr/local/lib
 OBJECTS         := 
-LIBRARIES       := -lopencv_core -lopencv_imgcodecs -lopencv_imgproc -lopencv_highgui -lopencv_objdetect 
+LIBRARIES       := -lstdc++ -lopencv_core -lopencv_imgcodecs -lopencv_imgproc -lopencv_highgui -lopencv_objdetect 
 
 .PHONY: all clean
 
@@ -13,6 +13,5 @@ test:
         
 clean:
 
-	rm -f *.o
-	rm -f test
+	rm -f *.o test
 

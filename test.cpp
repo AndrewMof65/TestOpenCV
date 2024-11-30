@@ -94,27 +94,29 @@ Vec3i circleDetection(Mat &image) {
 
 
 int main(int argc, char** argv) {
-    
-    const String filename = "3.png";
-    String winName = "Test "+filename;
-    Mat channel[3],ch[3];
-    
-    namedWindow(winName, IMREAD_COLOR);
-    Mat image = imread(filename);
-    if (image.empty()){
-  	cout << "Could not open or find the image" << endl;
-  	cin.get(); //wait for any key press
-  	return -1;
-    }
-    channel[0] = get_filter(ImgFilter::CIRCLE,image);
-    channel[1] = get_filter(ImgFilter::PATH_LINES,image);
-    channel[2] = get_filter(ImgFilter::BOXES,image);
-
     Mat img;
     int sm;
-    cout<<"Height = " << image.size().height<<std::endl;
+    String filename = "";
+    if(argc >1) filename = argv[1];
+    if(filename.length()==0){
+        cout << "Введите имя файла: " ;
+        cin >> filename;
+    }
+    String winName = "Test "+filename;
+    Mat channel[3],ch[3];
+    Mat image = imread(filename);
+    if (image.empty()){
+  	cout << "Невозможно прочитать файл " << filename << endl;
+  	cin.get(); //стукнем по клавише - любой
+  	return -1;
+    }
+    namedWindow(winName, IMREAD_COLOR);
+    channel[0] = get_filter(ImgFilter::CIRCLE,image);// выделим кружок/шарик
+    channel[1] = get_filter(ImgFilter::PATH_LINES,image);//выделим направляющие
+    channel[2] = get_filter(ImgFilter::BOXES,image);//выделим ящики
+    
     for(int i=0;i<image.size().height;i++){
-        channel[0] = shiftImg(channel[0],0,1);
+        channel[0] = shiftImg(channel[0],0,1);//Двигаем кружок/шарик вниз
         sm = intersection(channel[0],channel[1]);
         if(sm>0)break;
         sm = intersection(channel[0],channel[2]);
@@ -144,8 +146,9 @@ int main(int argc, char** argv) {
             3,
             Scalar(0,0,0),
             4);
+    cout<<"Координаты шарика - " << coord <<std::endl;
     imshow(winName, image);
-    waitKey(0);
+    while((cv::waitKey() & 0xEFFFFF) != 27);//Press ESC on window focus
     return 0;
 
 }
