@@ -1,4 +1,4 @@
 *.png
 *.o
-*.mp4
+./*.mp4
 run_me
