@@ -44,10 +44,7 @@ int main(int argc, char** argv) {
         sm = CVTools::intersection(channel[0],channel[1]);
         if(sm>0)break;
         sm = CVTools::intersection(channel[0],channel[2]);
-        if(sm>0){
-            CVTools::shiftImg(channel[0],3,0);
-            break;
-        }
+        if(sm>0)break;
         ch[0] = 255-channel[0];
         ch[1] = 255-channel[1];
         ch[2] = 255-channel[2];
