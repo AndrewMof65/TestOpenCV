@@ -1,7 +1,6 @@
 
 #ifndef TOOLS_H
 #define TOOLS_H
-#endif
 
 #include <opencv2/core.hpp>
 #include "opencv2/opencv.hpp"
@@ -29,3 +28,9 @@ public:
     static int intersection(Mat &img1,Mat &img2);
     static Vec3i circleDetection(Mat &image);
 };
+
+
+
+
+#endif
+
